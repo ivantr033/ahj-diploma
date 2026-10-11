@@ -1,0 +1,589 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f5f7;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#chat-workspace-app {
+    width: 100%;
+    max-width: 750px;
+    height: calc(100vh - 40px);
+    background: #e5e5e5;
+    border: 1px solid #b3b3b3;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* 📌 TOP PINNED MESSAGE BANNER */
+#pinned-message-bar {
+    background: #ffffff;
+    border-bottom: 1px solid #cbd5e0;
+    padding: 10px 16px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    font-size: 13px;
+}
+
+.pin-label-text {
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.pin-content-preview {
+    color: #4a5568;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 550px;
+}
+
+.btn-unpin-cross {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #a0aec0;
+}
+
+/* CENTRAL HISTORY PANEL */
+#chat-history-viewport {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-sizing: border-box;
+}
+
+/* CLASSIC TELEGRAM BALLOONS */
+.chat-bubble-row {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* My messages (Right) */
+.chat-bubble-row.outgoing-user {
+    align-self: flex-end;
+    background: #effdde;
+    border-bottom-right-radius: 2px;
+}
+
+/* Bot messages (Left) */
+.chat-bubble-row.incoming-bot {
+    align-self: flex-start;
+    background: #ffffff;
+    border-bottom-left-radius: 2px;
+}
+
+.msg-text-link {
+    color: #007bff;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.msg-timestamp-stamp {
+    font-size: 10px;
+    color: #a0aec0;
+    align-self: flex-end;
+    margin-top: 4px;
+    font-family: monospace;
+}
+
+/* File attachment controls and interaction in the bubbles */
+.bubble-file-attachment {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.btn-download-attachment {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-pin-this-msg {
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.chat-bubble-row:hover .btn-pin-this-msg {
+    opacity: 1;
+}
+
+/* INTERACTIVE MEDIA PLAYERS */
+.bubble-media-player {
+    max-width: 100%;
+    border-radius: 6px;
+    margin-top: 4px;
+}
+
+/* Unified Bottom Action Bar */
+.chat-footer-bar {
+    background: #ffffff;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+    border-top: 1px solid #cbd5e0;
+}
+
+.chat-core-input {
+    flex-grow: 1;
+    border: 1px solid #cbd5e0;
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 14px;
+    outline: none;
+    font-family: inherit;
+}
+
+#footer-normal-controls-wrapper,
+#footer-category-view-mode-wrapper,
+#voice-recorder-active-panel {
+    display: none;
+    align-items: center !important;
+    width: 100%;
+    gap: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.btn-footer-action {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    transition: background 0.15s;
+}
+
+.btn-footer-action:hover {
+    background: #f0f2f5;
+}
+
+/* ACTIVE VOICE RECORDING PANEL */
+#voice-recorder-active-panel {
+    justify-content: flex-end;
+}
+
+.voice-timer-display {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ef4444;
+    font-family: monospace;
+}
+
+.btn-rec-control {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    background: #fff;
+}
+
+.btn-rec-control.btn-confirm {
+    color: #10b981;
+    border-color: #10b981;
+}
+
+.btn-rec-control.btn-cancel {
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+/* ACTIVE DRAG & DROP ZONE ACROSS THE ENTIRE SCREEN */
+#global-drag-overlay-mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 123, 255, 0.15);
+    border: 4px dashed #007bff;
+    border-radius: 16px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #007bff;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 999;
+    pointer-events: none;
+}
+
+#chat-workspace-app.dragover #global-drag-overlay-mask {
+    display: flex;
+}
+
+/* ==========================================================================
+    WHATSAPP HEADER & ACTIONS STYLE
+   ========================================================================== */
+.chat-header-top-bar {
+    background: #075e54;
+    color: #ffffff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 110;
+}
+
+.chat-header-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-avatar-circle {
+    width: 40px;
+    height: 40px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.header-text-metadata {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-profile-name {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.header-status-indicator {
+    font-size: 11px;
+    color: #d1fae5;
+    font-weight: 500;
+}
+
+.header-actions-suite {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-header-icon {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-header-icon:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.header-search-field {
+    border: none;
+    border-radius: 14px;
+    padding: 6px 12px;
+    font-size: 13px;
+    outline: none;
+    width: 0;
+    opacity: 0;
+    transition: width 0.3s ease, opacity 0.2s ease;
+    background: #ffffff;
+    color: #2d3748;
+}
+
+/* Search bar */
+.header-search-field.search-active {
+    width: 160px;
+    opacity: 1;
+}
+
+/* Fade-out visual effect for messages filtered by search */
+.chat-bubble-row.search-hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+    POP-UP EMOJIS & GREEN SEND BUTTON (WHATSAPP PREMIUM STYLE)
+   ========================================================================== */
+#emojis-popover-panel {
+    position: absolute;
+    bottom: 65px;
+    left: 16px;
+    background: #ffffff;
+    border: 1px solid #cbd5e0;
+    border-radius: 12px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 500;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform: scale(1);
+    opacity: 1;
+}
+
+#emojis-popover-panel.emojis-popover-hidden {
+    display: none !important;
+    transform: scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.emoji-picker-item {
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.emoji-picker-item:hover {
+    background: #f0f2f5;
+}
+
+/* WhatsApp's green, triangle-style send button */
+#btn-trigger-direct-send {
+    color: #075e54;
+    font-weight: bold;
+    transform: rotate(0deg);
+}
+
+/* ==========================================================================
+    WHATSAPP AUDIT BLOCKS & DELETE SYSTEM
+   ========================================================================== */
+
+/* Central gray information band */
+.chat-info-center-block {
+    align-self: center;
+    background: rgba(225, 235, 245, 0.8);
+    color: #4a5568;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 85%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin: 6px 0;
+    font-weight: 500;
+    animation: fadeInBlock 0.2s ease-out;
+}
+
+@keyframes fadeInBlock {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+        SMART ANTI-COLLISION MIRROR SYSTEM
+   ========================================================================== */
+
+/* Common base rule for the floating button group */
+.bubble-hover-actions-group {
+    position: absolute;
+    top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 10;
+}
+
+/* CASE A: If the message is ours (it is on the RIGHT), we swipe the buttons to the LEFT */
+.chat-bubble-row.outgoing-user .bubble-hover-actions-group {
+    left: -34px;
+    /* We push it toward the center of the chat, away from the edge of the screen */
+    transform: translateX(5px);
+}
+
+.chat-bubble-row.outgoing-user:hover .bubble-hover-actions-group {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* CASE B: If the message is from the Bot (it is on the LEFT), we place the buttons on the RIGHT */
+.chat-bubble-row.incoming-bot .bubble-hover-actions-group {
+    right: -34px;
+    /* We push it toward the center of the chat */
+    transform: translateX(-5px);
+}
+
+.chat-bubble-row.incoming-bot:hover .bubble-hover-actions-group {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Hovering the mouse over the balloon reveals the trash can and the pin */
+.chat-bubble-row:hover .bubble-hover-actions-group {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.btn-bubble-action-trigger {
+    background: #ffffff;
+    border: 1px solid #cbd5e0;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.15s ease;
+}
+
+.btn-bubble-action-trigger:hover {
+    transform: scale(1.1);
+    background: #edf2f7;
+}
+
+.btn-bubble-action-trigger.delete-trash:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: #fef2f2;
+}
+
+/* ==========================================================================
+    WHATSAPP MEDIA CATEGORIES POPOVER PANEL (TELEGRAM STYLE)
+   ========================================================================== */
+#media-categories-popover-panel {
+    position: absolute;
+    top: 65px;
+    right: 16px;
+    background: #ffffff;
+    border: 1px solid #cbd5e0;
+    border-radius: 12px;
+    width: 210px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 600;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform: scale(1);
+    opacity: 1;
+}
+
+#media-categories-popover-panel.media-popover-hidden {
+    display: none !important;
+    transform: scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.media-menu-header-title {
+    font-size: 11px;
+    font-weight: bold;
+    color: #a0aec0;
+    text-transform: uppercase;
+    padding: 10px 14px 6px 14px;
+    border-bottom: 1px solid #edf2f7;
+    letter-spacing: 0.05em;
+}
+
+.media-category-menu-item {
+    font-size: 13px;
+    color: #2d3748;
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.15s;
+}
+
+.media-category-menu-item:hover {
+    background: #f7fafc;
+}
+
+.media-category-menu-item:last-child {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.badge-count-inline {
+    background: #edf2f7;
+    color: #4a5568;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: monospace;
+}
+
+/* Dynamic rule to hide bubbles that do not belong to the filtered category. */
+.chat-bubble-row.category-hidden,
+.chat-info-center-block.category-hidden {
+    display: none !important;
+}
+
